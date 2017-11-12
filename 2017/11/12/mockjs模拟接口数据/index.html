@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="mockjs官网：http://mockjs.com/去哪儿前端接口 Mock 实践- YApi平台：https://github.com/ymfe/yapi 简介在前后端分离的环境下，前端的页面内容渲染需要依赖后台接口，而大多数情况下开发是前后端同时进行，就会出现后台接口没完成的时，前端只能写静态页面，对复杂数据的模拟则不是很方便。mockjs则可以更方便模拟真实接口数据，让前后端分离开发更方便">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&#39;mockjs模拟接口数据&#39;">
+<meta property="og:url" content="http://yoursite.com/2017/11/12/mockjs模拟接口数据/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="mockjs官网：http://mockjs.com/去哪儿前端接口 Mock 实践- YApi平台：https://github.com/ymfe/yapi 简介在前后端分离的环境下，前端的页面内容渲染需要依赖后台接口，而大多数情况下开发是前后端同时进行，就会出现后台接口没完成的时，前端只能写静态页面，对复杂数据的模拟则不是很方便。mockjs则可以更方便模拟真实接口数据，让前后端分离开发更方便">
+<meta property="og:updated_time" content="2017-11-12T05:35:16.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&#39;mockjs模拟接口数据&#39;">
+<meta name="twitter:description" content="mockjs官网：http://mockjs.com/去哪儿前端接口 Mock 实践- YApi平台：https://github.com/ymfe/yapi 简介在前后端分离的环境下，前端的页面内容渲染需要依赖后台接口，而大多数情况下开发是前后端同时进行，就会出现后台接口没完成的时，前端只能写静态页面，对复杂数据的模拟则不是很方便。mockjs则可以更方便模拟真实接口数据，让前后端分离开发更方便">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/12/mockjs模拟接口数据/"/>
+
+
+
+
+
+  <title>'mockjs模拟接口数据' | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/12/mockjs模拟接口数据/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">'mockjs模拟接口数据'</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-12T13:34:33+08:00">
+                2017-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://mockjs.com/" target="_blank" rel="external">mockjs官网：http://mockjs.com/</a><br><a href="https://github.com/ymfe/yapi" target="_blank" rel="external">去哪儿前端接口 Mock 实践- YApi平台：https://github.com/ymfe/yapi</a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在前后端分离的环境下，前端的页面内容渲染需要依赖后台接口，而大多数情况下开发是前后端同时进行，就会出现后台接口没完成的时，前端只能写静态页面，对复杂数据的模拟则不是很方便。mockjs则可以更方便模拟真实接口数据，让前后端分离开发更方便。<br>mockjs的作用是生成随机数据，拦截 Ajax 请求。主要有以下功能：</p>
+<ul>
+<li>前后端分离，让前端攻城师独立于后端进行开发；</li>
+<li>增加单元测试的真实性，通过随机数据，模拟各种场景；</li>
+<li>开发无侵入，不需要修改既有代码，就可以拦截 Ajax 请求，返回模拟的响应数据；</li>
+<li>用法简单，符合直觉的接口；</li>
+<li>数据类型丰富，支持生成随机的文本、数字、布尔值、日期、邮箱、链接、图片、颜色等；</li>
+<li>方便扩展，支持支持扩展更多数据类型，支持自定义函数和正则。</li>
+</ul>
+<h2 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h2><p>引入mockjs<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"mock.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = Mock.mock(&#123;</div><div class="line">    <span class="comment">// 属性 list 的值是一个数组，其中含有 1 到 10 个元素</span></div><div class="line">    <span class="string">'list|1-10'</span>: [&#123;</div><div class="line">        <span class="comment">// 属性 id 是一个自增数，起始值为 1，每次增 1</span></div><div class="line">        <span class="string">'id|+1'</span>: <span class="number">1</span></div><div class="line">    &#125;]</div><div class="line">&#125;)</div><div class="line"><span class="comment">// 输出结果</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(data, <span class="literal">null</span>, <span class="number">4</span>))</div></pre></td></tr></table></figure></p>
+<h2 id="语法规范"><a href="#语法规范" class="headerlink" title="语法规范"></a>语法规范</h2><p>Mock.js 的语法规范包括两部分：</p>
+<ol>
+<li>数据模板定义规范（Data Template Definition，DTD）</li>
+<li>数据占位符定义规范（Data Placeholder Definition，DPD）</li>
+</ol>
+<h3 id="数据模板定义规范-DTD"><a href="#数据模板定义规范-DTD" class="headerlink" title="数据模板定义规范 DTD"></a>数据模板定义规范 DTD</h3><hr>
+<p>由 3 部分构成：属性名name、生成规则rule、属性值value：</p>
+<ul>
+<li>属性名和生成规则用’|’隔开；</li>
+<li>生成规则根据属性值类型确定；</li>
+<li>属性值类型有String，Number，Boolean，Object，Array，Function，RegExp<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">'name | rule'</span>: <span class="keyword">value</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>实例：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = Mock.mock(&#123;</div><div class="line">    <span class="string">'numList|2-10'</span>:[&#123; <span class="comment">// 生成2-10个对象的列表</span></div><div class="line">            <span class="string">'str1|10'</span>:<span class="string">'a'</span>,<span class="comment">// 生成10个a的字符串</span></div><div class="line">            <span class="string">'str2|2-5'</span>:<span class="string">'b'</span>,<span class="comment">// 生成2至5个的b字符串</span></div><div class="line">            <span class="string">'num1|+1'</span>:<span class="number">1000</span>,<span class="comment">// 初始值是1000，自动加1</span></div><div class="line">            <span class="string">'num2|100-999'</span>:<span class="number">0</span>,<span class="comment">// 生成100到999之间的整数，数值0仅做声明为数字类型</span></div><div class="line">            <span class="string">'num3|100-999.2-4'</span>:<span class="number">0</span>,<span class="comment">// 生成小数点位数为2到4位，100到999之间的小数，数值0仅做声明为数字类型</span></div><div class="line">            <span class="string">'boolean1|1'</span>:<span class="literal">false</span>,<span class="comment">// 生成true或false</span></div><div class="line">            <span class="string">'boolean2|9-1'</span>:<span class="literal">false</span>,<span class="comment">// 生成false概率9/9+1，生成true概率为1/9+1</span></div><div class="line">            <span class="string">'obj1|2'</span>:&#123;<span class="attr">name</span>:<span class="string">'张三'</span>,<span class="attr">age</span>:<span class="number">14</span>,<span class="attr">sex</span>:<span class="string">'男'</span>&#125;,<span class="comment">// 随机从对象中取出2个属性</span></div><div class="line">            <span class="string">'obj2|1-3'</span>:&#123;<span class="attr">name</span>:<span class="string">'张三'</span>,<span class="attr">age</span>:<span class="number">14</span>,<span class="attr">sex</span>:<span class="string">'男'</span>&#125;,<span class="comment">// 随机从对象中取出1-3个属性</span></div><div class="line">            <span class="string">'arr1|1'</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],<span class="comment">// 从数组中随机选出1个元素</span></div><div class="line">            <span class="string">'arr2|+1'</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],<span class="comment">// 从数组中顺序选出1个元素</span></div><div class="line">            <span class="string">'arr3|2'</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],<span class="comment">// 生成一个重复值2次的数组[1,2,3,4,5,1,2,3,4,5]</span></div><div class="line">            <span class="string">'arr4|1-3'</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],<span class="comment">// 生成一个重复值1-3次的数组</span></div><div class="line">            <span class="string">'func'</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="comment">// 生成function返回的内容</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</div><div class="line">            &#125;,</div><div class="line">            <span class="string">'regExp'</span>:<span class="regexp">/^1[3|4|5|7|8][0-9]&#123;9&#125;$/</span> <span class="comment">// 生成匹配正则的内容</span></div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;);</div><div class="line"><span class="comment">// 输出结果</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(data, <span class="literal">null</span>, <span class="number">4</span>))</div></pre></td></tr></table></figure></p>
+<h3 id="数据占位符定义规范-DPD"><a href="#数据占位符定义规范-DPD" class="headerlink" title="数据占位符定义规范 DPD"></a>数据占位符定义规范 DPD</h3><hr>
+<p>占位符 只是在属性值字符串中占个位置，并不出现在最终的属性值中。<br>占位符 的格式为：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@占位符</span></div><div class="line"><span class="meta">@占位符(参数</span> [, 参数])</div></pre></td></tr></table></figure></p>
+<ol>
+<li>用 @ 来标识其后的字符串是 占位符。</li>
+<li>占位符 引用的是 Mock.Random 中的方法。</li>
+<li>通过 Mock.Random.extend() 来扩展自定义占位符。</li>
+<li>占位符 也可以引用 数据模板 中的属性。</li>
+<li>占位符 会优先引用 数据模板 中的属性。</li>
+<li>占位符 支持 相对路径 和 绝对路径。</li>
+</ol>
+<p><strong>实例</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span> 使用 Mock</div><div class="line">var data2 = Mock.mock(&#123;</div><div class="line">    <span class="regexp">//</span> 生成随机中文名字，@cfirst(姓),@clast(名)</div><div class="line">    name: <span class="string">'@cname'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机英文名字，@first(姓),@last(名)</div><div class="line">    name2: <span class="string">'@name'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机日期，默认格式yyyy-MM-dd，可自定义格式，T(毫秒)</div><div class="line">    date: <span class="string">'@date(yyyy_MM_dd HH:mm:ss)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机时间，默认格式HH:mm:ss，可自定义格式</div><div class="line">    time: <span class="string">'@time()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机日期和时间，默认格式yyyy-MM-dd HH:mm:ss，可自定义格式</div><div class="line">    datetime: <span class="string">'@datetime()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成当前的日期和时间字符串，默认格式yyyy-MM-dd HH:mm:ss，可自定义格式，Random.now( unit?, format? )，unit:year、month、week、day、hour、minute、second、week</div><div class="line">    now: <span class="string">'@now()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">5</span>个字符的英文单词，默认<span class="number">3</span>-<span class="number">10</span>，word()，word( len )，word( min, max )</div><div class="line">    word: <span class="string">'@word(3,5)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">5</span>个字符的中文标题，默认<span class="number">3</span>-<span class="number">10</span>，title()，title( len )，title( min, max )</div><div class="line">    title: <span class="string">'@title(3,5)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">10</span>个单词的英文句子，默认<span class="number">12</span>-<span class="number">18</span>，sentence()，sentence( len )，sentence( min, max )</div><div class="line">    sentence: <span class="string">'@sentence(3,10)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">5</span>句子数的英文文本，默认<span class="number">3</span>-<span class="number">7</span>，paragraph()，paragraph( len )，paragraph( min, max )</div><div class="line">    paragraph: <span class="string">'@paragraph(3,5)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">5</span>个字符的英文标题，单词首字母大写，默认<span class="number">3</span>-<span class="number">10</span>，ctitle()，ctitle( len )，ctitle( min, max )</div><div class="line">    ctitle: <span class="string">'@ctitle(3,5)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 从汉字池中随机选择<span class="number">4</span>个，默认随机汉字，cword( pool )，cword( length )，cword( pool, length )，cword( min, max )，cword( pool, min, max )</div><div class="line">    cword: <span class="string">'@cword("零一二三四五六七八九十",4)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">10</span>个单词的中文句子，默认<span class="number">12</span>-<span class="number">18</span>，csentence()，csentence( len )，csentence( min, max )</div><div class="line">    csentence: <span class="string">'@csentence(3,10)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成随机<span class="number">3</span>-<span class="number">5</span>句子数的中文文本，默认<span class="number">3</span>-<span class="number">7</span>，cparagraph()，cparagraph( len )，cparagraph( min, max )</div><div class="line">    cparagraph: <span class="string">'@cparagraph(3,5)'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成一个随机的图片地址，image( size, background, foreground, format, text )，</div><div class="line">    <span class="regexp">//</span> size: 大小（<span class="string">"200 x 100"</span>），background：图片背景；foreground：图片前景；format：图片格式（默认png）；text：指示图片上的文字</div><div class="line">    image: <span class="string">'@image()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 生成一段随机的 Base64 图片编码，dataImage( size, text )，size: 大小（<span class="string">"200 x 100"</span>），text：指示图片上的文字</div><div class="line">    dataImage: <span class="string">'@dataImage("200x300","hello world")'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个颜色，格式为 <span class="string">'#RRGGBB'</span>，hex()，rgb()，rgba()，hsl()</div><div class="line">    color: <span class="string">'@color()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个（中国）大区</div><div class="line">    region: <span class="string">'@region()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个（中国）省（或直辖市、自治区、特别行政区）</div><div class="line">    province: <span class="string">'@province()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个（中国）市，city(true)生成的市包含所属省</div><div class="line">    city: <span class="string">'@city()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个（中国）县，county(true)生成的市包含所属省，市</div><div class="line">    county: <span class="string">'@county()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个邮政编码（六位数字）</div><div class="line">    zip: <span class="string">'@zip()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个 URL，url( protocol?, host? )</div><div class="line">    url: <span class="string">'@url()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个 URL 协议，<span class="string">"ftp"</span></div><div class="line">    protocol: <span class="string">'@protocol()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个域名，<span class="string">"kozfnb.org"</span></div><div class="line">    domain: <span class="string">'@domain()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个顶级域名， <span class="string">"net"</span></div><div class="line">    tld: <span class="string">'@tld()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个邮件地址，email( domain )</div><div class="line">    email: <span class="string">'@email()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个 IP 地址</div><div class="line">    ip: <span class="string">'@ip()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个 guid</div><div class="line">    guid: <span class="string">'@guid()'</span>,</div><div class="line"></div><div class="line">    <span class="regexp">//</span> 随机生成一个 <span class="number">18</span> 位身份证</div><div class="line">    id: <span class="string">'@id()'</span>,</div><div class="line"></div><div class="line">    <span class="string">'incrementList|4'</span> : [&#123;</div><div class="line">        <span class="regexp">//</span> 整数自增，默认是<span class="number">1</span></div><div class="line">        increment: <span class="string">'@increment(1000)'</span>,</div><div class="line">    &#125;]</div><div class="line">&#125;);</div><div class="line"><span class="regexp">//</span> 输出结果</div><div class="line">console.log(JSON.stringify(data2, null, <span class="number">4</span>))</div></pre></td></tr></table></figure></p>
+<h2 id="拦截-Ajax-请求"><a href="#拦截-Ajax-请求" class="headerlink" title="拦截 Ajax 请求"></a>拦截 Ajax 请求</h2><ol>
+<li><code>Mock.mock( rurl?, rtype?, template|function( options ) )</code> 所带的参数都是可选的。</li>
+<li>使用<code>Mock.mock( template )</code>参数是MockJs的语法模板时可以生产需要的一些接口数据。</li>
+<li>使用rul，rtype参数，则可以配置拦截Ajax请求。</li>
+<li>使用<code>Mock.setup(settings )</code>配置拦截 Ajax 请求时的行为。支持的配置项有：timeout。</li>
+</ol>
+<h3 id="Mock-mock"><a href="#Mock-mock" class="headerlink" title="Mock.mock()"></a>Mock.mock()</h3><p>Mock.mock( rurl?, rtype?, template|function( options ) )</p>
+<ul>
+<li><p>rurl<br>可选。<br>表示需要拦截的 URL，可以是 URL 字符串或 URL 正则。例如 /\/domain\/list.json/、’/domian/list.json’。</p>
+</li>
+<li><p>rtype<br>可选。<br>表示需要拦截的 Ajax 请求类型。例如 GET、POST、PUT、DELETE 等。</p>
+</li>
+<li><p>template<br>可选。<br>表示数据模板，可以是对象或字符串。例如 { ‘data|1-10’:[{}] }、’@EMAIL’。</p>
+</li>
+<li><p>function(options)<br>可选。<br>表示用于生成响应数据的函数。拦截到ajax请求function将会执行并返回的数据。<br>options<br>指向本次请求的 Ajax 选项集，含有 url、type 和 body 三个属性，参见 XMLHttpRequest 规范。</p>
+</li>
+</ul>
+<p><strong>示例：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Mock.mock( rurl, rtype, template )</span></div><div class="line">Mock.mock(<span class="regexp">/\.json/</span>, <span class="string">'get'</span>, &#123;</div><div class="line">    <span class="string">'list|1-10'</span>: [&#123;</div><div class="line">        <span class="string">'id|+1'</span>: <span class="number">1</span>,</div><div class="line">        <span class="string">'email'</span>: <span class="string">'@EMAIL'</span></div><div class="line">    &#125;]</div><div class="line">&#125;);</div><div class="line"></div><div class="line">$(<span class="string">'#btn_ajax'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    $.get(<span class="string">'http://127.0.0.1:3000/helloworld.json'</span>, &#123;&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(res);</div><div class="line">    &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// Mock.mock( rurl, rtype, <span class="function"><span class="keyword">function</span><span class="params">(options)</span></span> )</div><div class="line">Mock.mock(/\.json/, <span class="string">'post'</span>, <span class="function"><span class="keyword">function</span><span class="params">(options)</span></span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'拦截到'</span> + options.<span class="built_in">type</span> + <span class="string">'请求'</span>;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">$(<span class="string">'#btn_ajax'</span>).click(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    $.ajax(&#123;</div><div class="line">        url: <span class="string">'hello.json'</span>,</div><div class="line">        <span class="built_in">type</span>: <span class="string">'post'</span>,</div><div class="line">        dataType: <span class="string">'json'</span></div><div class="line">    &#125;).done(<span class="function"><span class="keyword">function</span> <span class="params">(data)</span></span> &#123;</div><div class="line">      console.<span class="built_in">log</span>(data);</div><div class="line">    &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Mock-setup"><a href="#Mock-setup" class="headerlink" title="Mock.setup()"></a>Mock.setup()</h3><p>Mock.setup( settings )，配置拦截 Ajax 请求时的行为。<br>支持的配置项有：timeout，拦截到请求时响应的延迟时间，值可以固定，也可以随机范围内，默认值是’10-100’。<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Mock</span><span class="selector-class">.setup</span>(&#123;</div><div class="line">    <span class="attribute">timeout</span>: <span class="string">'200-600'</span> // 响应时间介于 <span class="number">200</span> 和 <span class="number">600</span> 毫秒之间。</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<h2 id="简单商品模拟"><a href="#简单商品模拟" class="headerlink" title="简单商品模拟"></a>简单商品模拟</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = Mock.mock(&#123;</div><div class="line"><span class="string">'pageNum'</span>:<span class="number">1</span>,</div><div class="line"><span class="string">'pageSize'</span>:<span class="number">12</span>,</div><div class="line"><span class="string">'total'</span>:<span class="number">999</span>,</div><div class="line"><span class="string">'data|2-10'</span>: [</div><div class="line">  &#123;</div><div class="line">    <span class="string">'goodsId|+1'</span>: <span class="number">1000</span>,</div><div class="line">    <span class="string">'goodsName'</span>: <span class="string">'@ctitle'</span>,</div><div class="line">    <span class="string">'goodsPrice|0-9999.2'</span>:<span class="number">0</span>,</div><div class="line">    <span class="string">'goodsImg'</span>:<span class="string">'@image()'</span>,</div><div class="line">    <span class="string">'num:|1-999'</span>:<span class="number">0</span>,</div><div class="line">    <span class="string">'addTime'</span>:<span class="string">'@date'</span>,</div><div class="line">    <span class="string">'desc'</span>:<span class="string">'@csentence(6-15)'</span></div><div class="line">  &#125;</div><div class="line">]</div><div class="line">&#125;);</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(data))</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"pageNum"</span>:<span class="number">1</span>,</div><div class="line">    <span class="attr">"pageSize"</span>:<span class="number">12</span>,</div><div class="line">    <span class="attr">"total"</span>:<span class="number">999</span>,</div><div class="line">    <span class="attr">"data"</span>:[</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"goodsId"</span>:<span class="number">1000</span>,</div><div class="line">            <span class="attr">"goodsName"</span>:<span class="string">"认清当你"</span>,</div><div class="line">            <span class="attr">"goodsPrice"</span>:<span class="number">5650.11</span>,</div><div class="line">            <span class="attr">"goodsImg"</span>:<span class="string">"http://dummyimage.com/336x280"</span>,</div><div class="line">            <span class="attr">"num:"</span>:<span class="number">508</span>,</div><div class="line">            <span class="attr">"addTime"</span>:<span class="string">"2012-10-11"</span>,</div><div class="line">            <span class="attr">"desc"</span>:<span class="string">"。"</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"goodsId"</span>:<span class="number">1001</span>,</div><div class="line">            <span class="attr">"goodsName"</span>:<span class="string">"元元与北"</span>,</div><div class="line">            <span class="attr">"goodsPrice"</span>:<span class="number">4564.33</span>,</div><div class="line">            <span class="attr">"goodsImg"</span>:<span class="string">"http://dummyimage.com/300x600"</span>,</div><div class="line">            <span class="attr">"num:"</span>:<span class="number">947</span>,</div><div class="line">            <span class="attr">"addTime"</span>:<span class="string">"2005-11-28"</span>,</div><div class="line">            <span class="attr">"desc"</span>:<span class="string">"。"</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            <span class="attr">"goodsId"</span>:<span class="number">1002</span>,</div><div class="line">            <span class="attr">"goodsName"</span>:<span class="string">"七江全却"</span>,</div><div class="line">            <span class="attr">"goodsPrice"</span>:<span class="number">4115.53</span>,</div><div class="line">            <span class="attr">"goodsImg"</span>:<span class="string">"http://dummyimage.com/120x240"</span>,</div><div class="line">            <span class="attr">"num:"</span>:<span class="number">215</span>,</div><div class="line">            <span class="attr">"addTime"</span>:<span class="string">"2000-05-23"</span>,</div><div class="line">            <span class="attr">"desc"</span>:<span class="string">"。"</span></div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>##YApi平台<br>去哪儿开源的基于 Mockjs的 api 管理平台。<br><a href="https://github.com/ymfe/yapi" target="_blank" rel="external">去哪儿前端接口 Mock 实践- YApi平台：https://github.com/ymfe/yapi</a></p>
+<h3 id="内网部署"><a href="#内网部署" class="headerlink" title="内网部署"></a>内网部署</h3><h4 id="要求"><a href="#要求" class="headerlink" title="要求"></a>要求</h4><p>nodejs（7.6+)<br>mongodb（2.6+）</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>执行 yapi server 启动可视化部署程序，输入相应的配置和点击开始部署，就能完成整个网站的部署。部署完成之后，可按照提示信息，执行 node/{网站路径/server/app.js} 启动服务器。在浏览器打开指定url, 点击登录输入您刚才设置的管理员邮箱，默认密码(ymfe.org) 登录系统（默认密码可在个人中心修改）。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm <span class="keyword">install</span> -g yapi-cli <span class="comment">--registry https://registry.npm.taobao.org</span></div><div class="line">yapi <span class="keyword">server</span></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/29/bootstrap-table使用/" rel="next" title="bootstrap-table使用">
+                <i class="fa fa-chevron-left"></i> bootstrap-table使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单使用"><span class="nav-number">2.</span> <span class="nav-text">简单使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语法规范"><span class="nav-number">3.</span> <span class="nav-text">语法规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据模板定义规范-DTD"><span class="nav-number">3.1.</span> <span class="nav-text">数据模板定义规范 DTD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据占位符定义规范-DPD"><span class="nav-number">3.2.</span> <span class="nav-text">数据占位符定义规范 DPD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截-Ajax-请求"><span class="nav-number">4.</span> <span class="nav-text">拦截 Ajax 请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mock-mock"><span class="nav-number">4.1.</span> <span class="nav-text">Mock.mock()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mock-setup"><span class="nav-number">4.2.</span> <span class="nav-text">Mock.setup()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单商品模拟"><span class="nav-number">5.</span> <span class="nav-text">简单商品模拟</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内网部署"><span class="nav-number">5.1.</span> <span class="nav-text">内网部署</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#要求"><span class="nav-number">5.1.1.</span> <span class="nav-text">要求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">5.1.2.</span> <span class="nav-text">安装</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+<!--
+<span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+ <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+<div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+-->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
